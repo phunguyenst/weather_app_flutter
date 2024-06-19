@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show immutable;
 import 'package:weather_app_tutorial/constants/constants.dart';
 import 'package:weather_app_tutorial/models/hourly_weather.dart';
 import 'package:weather_app_tutorial/models/weather.dart';
 import 'package:weather_app_tutorial/services/geolocator.dart';
 import 'package:weather_app_tutorial/utils/logging.dart';
 
+@immutable
 class ApiHelper {
   static const baseUrl = "http://api.openweathermap.org/data/2.5";
   static const weeklyWeatherUrl =
