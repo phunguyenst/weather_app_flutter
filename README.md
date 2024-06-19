@@ -1,3 +1,5 @@
-# weather_app_tutorial
+# weather_app_flutter with using RiverPod State management
 
-A new Flutter project.
+-- clone project
++ flutter pub get
++ flutter run
