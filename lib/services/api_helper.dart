@@ -48,7 +48,7 @@ class ApiHelper {
   static Future<Weather> getWeatherByCityName({
     required String cityName,
   }) async {
-    final url = _constructWeatherByCityURL(cityName);
+    final url = _constructWeatherByCityUrl(cityName);
     final response = await _fetchData(url);
     return Weather.fromJson(response);
   }
@@ -61,9 +61,8 @@ class ApiHelper {
     return '$baseUrl/forecast?lat=$lat&lon=$lon&units=metric&appid=${Constants.apiKey}';
   }
 
-  static String _constructWeatherByCityURL(String cityName) {
-    return '$baseUrl/forecast?lat=$lat&lon=$lon&units=metric&appid=${Constants.apiKey}';
-  }
+  static String _constructWeatherByCityUrl(String cityName) =>
+      '$baseUrl/weather?q=$cityName&units=metric&appid=${Constants.apiKey}';
 
   static String _constructWeeklyForecastURL() {
     return '$baseUrl/forecast?lat=$lat&lon=$lon&units=metric&appid=${Constants.apiKey}';
