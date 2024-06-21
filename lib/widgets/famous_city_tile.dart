@@ -44,8 +44,8 @@ class FamousCityTile extends ConsumerWidget {
                           '${data.main.temp.round().toString()}°',
                           style: TextStyles.h2,
                         ),
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01,
                         ),
                         Text(
                           data.weather[0].description,
@@ -65,7 +65,7 @@ class FamousCityTile extends ConsumerWidget {
               Text(
                 data.name,
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.white..withOpacity(.8),
                     fontWeight: FontWeight.w400),
               )
