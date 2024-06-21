@@ -9,8 +9,13 @@ import 'package:weather_app_tutorial/views/gradient_container.dart';
 
 class WeatherScreen extends ConsumerWidget {
   const WeatherScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> _refreshWeather() async {
+      await ref.read(currentWeatherProvider.notifier).fetchWeather();
+    }
+
     final weather = ref.watch(currentWeatherProvider);
     if (!weather.isLoading &&
         weather.weather == null &&
@@ -25,66 +30,69 @@ class WeatherScreen extends ConsumerWidget {
       return Text('Error: ${weather.error}');
     }
     if (weather.weather != null) {
-      return GradientContainer(children: [
-        const SizedBox(
-          width: double.infinity,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              weather.weather!.name,
-              style: TextStyles.h1,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              DateTime.now().dateTime,
-              style: TextStyles.subtitleText,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.3,
-              child: Image.asset(
-                  'assets/icons/${weather.weather!.weather[0].icon.replaceAll('n', 'd')}.png'),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Text(
-              weather.weather!.weather[0].description,
-              style: TextStyles.h3,
-            ),
-          ],
-        ),
+      return RefreshIndicator(
+        onRefresh: _refreshWeather,
+        child: GradientContainer(children: [
+          const SizedBox(
+            width: double.infinity,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                weather.weather!.name,
+                style: TextStyles.h1,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                DateTime.now().dateTime,
+                style: TextStyles.subtitleText,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.3,
+                child: Image.asset(
+                    'assets/icons/${weather.weather!.weather[0].icon.replaceAll('n', 'd')}.png'),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Text(
+                weather.weather!.weather[0].description,
+                style: TextStyles.h3,
+              ),
+            ],
+          ),
 
-        const SizedBox(
-          height: 40,
-        ),
-        WeatherInfo(weather: weather.weather!),
-        const SizedBox(
-          height: 30,
-        ),
-        //view for hourly weather
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Today',
-              style: TextStyles.h2,
-            ),
-            TextButton(
-                onPressed: () {}, child: const Text("View full forecast"))
-          ],
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        const HourlyForecastView(),
-      ]);
+          const SizedBox(
+            height: 40,
+          ),
+          WeatherInfo(weather: weather.weather!),
+          const SizedBox(
+            height: 30,
+          ),
+          //view for hourly weather
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Today',
+                style: TextStyles.h2,
+              ),
+              TextButton(
+                  onPressed: () {}, child: const Text("View full forecast"))
+            ],
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const HourlyForecastView(),
+        ]),
+      );
     }
     return const SizedBox(
       child: Text("No data"),
