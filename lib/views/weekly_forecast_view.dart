@@ -12,7 +12,6 @@ class WeeklyForecastView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weeklyForecastData = ref.watch(weeklyForecastProvider);
-    print("Weekly Forecast Data: $weeklyForecastData");
     return weeklyForecastData.when(data: (data) {
       return ListView.builder(
           itemCount: data.daily.weatherCode.length,
