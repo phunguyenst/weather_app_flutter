@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:weather_app_tutorial/constants/constants.dart';
 import 'package:weather_app_tutorial/models/hourly_weather.dart';
 import 'package:weather_app_tutorial/models/weather.dart';
+import 'package:weather_app_tutorial/models/weekly_weather.dart';
 import 'package:weather_app_tutorial/services/geolocator.dart';
 import 'package:weather_app_tutorial/utils/logging.dart';
 
@@ -37,11 +38,11 @@ class ApiHelper {
   }
 
   //Weekly Weather
-  static Future<HourlyWeather> getWeeklyWeather() async {
+  static Future<WeeklyWeather> getWeeklyForecast() async {
     await fetchLocation();
-    final url = _constructWeeklyForecastURL();
+    final url = _constructWeeklyForecastUrl();
     final response = await _fetchData(url);
-    return HourlyWeather.fromJson(response);
+    return WeeklyWeather.fromJson(response);
   }
 
   //Weather by city Name
@@ -64,9 +65,8 @@ class ApiHelper {
   static String _constructWeatherByCityUrl(String cityName) =>
       '$baseUrl/weather?q=$cityName&units=metric&appid=${Constants.apiKey}';
 
-  static String _constructWeeklyForecastURL() {
-    return '$baseUrl/forecast?lat=$lat&lon=$lon&units=metric&appid=${Constants.apiKey}';
-  }
+  static String _constructWeeklyForecastUrl() =>
+      '$weeklyWeatherUrl&latitude=$lat&longitude=$lon';
 
   // Fetch data url
   static Future<Map<String, dynamic>> _fetchData(String url) async {

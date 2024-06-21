@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_tutorial/constants/app_colors.dart';
+import 'package:weather_app_tutorial/screens/forecast_screen.dart';
 import 'package:weather_app_tutorial/screens/search_screen.dart';
 import 'package:weather_app_tutorial/screens/weather_screen.dart';
 
@@ -57,9 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _screen = [
     const WeatherScreen(),
     const SearchScreen(),
-    const Center(
-      child: Text("Weather Screen"),
-    ),
+    const ForecastScreen(),
     const Center(
       child: Text("Setting Screen"),
     ),
