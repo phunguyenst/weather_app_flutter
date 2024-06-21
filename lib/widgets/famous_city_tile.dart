@@ -16,10 +16,6 @@ class FamousCityTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherData = ref.watch(cityForecastProvider(city));
-
-    print("weatherData: $weatherData");
-    print("city1: $city");
-
     return weatherData.when(data: (data) {
       return Material(
         color: index == 0 ? AppColors.lightBlue : AppColors.accentBlue,

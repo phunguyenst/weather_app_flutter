@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_tutorial/constants/app_colors.dart';
 import 'package:weather_app_tutorial/constants/text_styles.dart';
+import 'package:weather_app_tutorial/models/famous_city.dart';
 import 'package:weather_app_tutorial/views/famous_cities.view.dart';
 import 'package:weather_app_tutorial/views/gradient_container.dart';
 import 'package:weather_app_tutorial/widgets/round_text_field.dart';
@@ -14,11 +15,22 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController _searchController;
+  List<FamousCity> filteredCities = famousCities;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _searchController.addListener(_filterCities);
+  }
+
+  void _filterCities() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredCities = famousCities.where((city) {
+        return city.name.toLowerCase().contains(query);
+      }).toList();
+    });
   }
 
   @override
@@ -32,14 +44,14 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       body: GradientContainer(
         children: [
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 "Pick Location",
                 style: TextStyles.h1,
               ),
-              const SizedBox(
+              SizedBox(
                 height: 30,
               ),
               Text(
@@ -65,7 +77,9 @@ class _SearchScreenState extends State<SearchScreen> {
             height: MediaQuery.of(context).size.height * 0.03,
           ),
           //Famous cities View
-          const FamousCitiesView(),
+          FamousCitiesView(
+            cities: filteredCities,
+          ),
         ],
       ),
     );

@@ -36,7 +36,7 @@ class ForecastScreen extends StatelessWidget {
           SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
           const HourlyForecastView(),
           SizedBox(height: MediaQuery.sizeOf(context).height * 0.03),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
