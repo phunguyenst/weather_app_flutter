@@ -12,7 +12,19 @@ class WeatherScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weather = ref.watch(currentWeatherProvider);
-    return weather.when(data: (data) {
+    if (!weather.isLoading &&
+        weather.weather == null &&
+        weather.error == null) {
+      Future.microtask(
+          () => ref.read(currentWeatherProvider.notifier).fetchWeather());
+    }
+    if (weather.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (weather.error != null) {
+      return Text('Error: ${weather.error}');
+    }
+    if (weather.weather != null) {
       return GradientContainer(children: [
         const SizedBox(
           width: double.infinity,
@@ -21,7 +33,7 @@ class WeatherScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              data.name,
+              weather.weather!.name,
               style: TextStyles.h1,
             ),
             const SizedBox(
@@ -37,13 +49,13 @@ class WeatherScreen extends ConsumerWidget {
             SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.3,
               child: Image.asset(
-                  'assets/icons/${data.weather[0].icon.replaceAll('n', 'd')}.png'),
+                  'assets/icons/${weather.weather!.weather[0].icon.replaceAll('n', 'd')}.png'),
             ),
             const SizedBox(
               height: 40,
             ),
             Text(
-              data.weather[0].description,
+              weather.weather!.weather[0].description,
               style: TextStyles.h3,
             ),
           ],
@@ -52,7 +64,7 @@ class WeatherScreen extends ConsumerWidget {
         const SizedBox(
           height: 40,
         ),
-        WeatherInfo(weather: data),
+        WeatherInfo(weather: weather.weather!),
         const SizedBox(
           height: 30,
         ),
@@ -73,10 +85,9 @@ class WeatherScreen extends ConsumerWidget {
         ),
         const HourlyForecastView(),
       ]);
-    }, error: (error, stackTrace) {
-      return Text('Error: $error');
-    }, loading: () {
-      return const Center(child: CircularProgressIndicator());
-    });
+    }
+    return const SizedBox(
+      child: Text("No data"),
+    );
   }
 }
